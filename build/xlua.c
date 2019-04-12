@@ -40,7 +40,7 @@ LUA_API int xlua_get_registry_index() {
 }
 
 LUA_API int xlua_get_lib_version() {
-	return 104;
+	return 105;
 }
 
 LUA_API int xlua_tocsobj_safe(lua_State *L,int index) {
@@ -547,6 +547,7 @@ LUA_API int cls_indexer(lua_State *L) {
 			lua_call(L, 0, 1);
 			return 1;
 		}
+		lua_pop(L, 1);
 	}
 	
 	if (!lua_isnil(L, lua_upvalueindex(2))) {
@@ -662,6 +663,12 @@ LUA_API int get_error_func_ref(lua_State *L) {
 LUA_API int load_error_func(lua_State *L, int ref) {
 	lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
 	return lua_gettop(L);
+}
+
+LUA_API int pcall_prepare(lua_State *L, int error_func_ref, int func_ref) {
+	lua_rawgeti(L, LUA_REGISTRYINDEX, error_func_ref);
+	lua_rawgeti(L, LUA_REGISTRYINDEX, func_ref);
+	return lua_gettop(L) - 1;
 }
 
 static void hook(lua_State *L, lua_Debug *ar)

@@ -214,6 +214,36 @@
 描述：
     
     克隆一个c#结构体
+	
+#### xlua.private_accessible(class)		
+描述：
+    
+    让一个类的私有字段，属性，方法等可用
+例子：
+
+    xlua.private_accessible(CS.UnityEngine.GameObject)	
+
+#### xlua.get_generic_method
+描述：
+    
+    获取一个泛型方法
+例子：
+
+~~~lua
+local foo_generic = xlua.get_generic_method(CS.GetGenericMethodTest, 'Foo')
+local bar_generic = xlua.get_generic_method(CS.GetGenericMethodTest, 'Bar')
+
+local foo = foo_generic(CS.System.Int32, CS.System.Double)
+local bar = bar_generic(CS.System.Double, CS.UnityEngine.GameObject)
+
+-- call instance method
+local o = CS.GetGenericMethodTest()
+local ret = foo(o, 1, 2)
+print(ret)
+
+-- call static method
+bar(2, nil)
+~~~
 
 #### cast函数
 
@@ -221,7 +251,7 @@
     
     指明以特定的接口访问对象，这在实现类无法访问的时候（比如internal修饰）很有用，这时可以这么来（假设下面的calc对象实现了C#的PerformentTest.ICalc接口）
 
-例如：
+例子：
     
     cast(calc, typeof(CS.PerformentTest.ICalc))
 
@@ -282,3 +312,17 @@ C#侧指明从Lua侧输入指定类型对象，Lua侧为该类型实例的userda
 
 成员方法以及delegate都是对应lua侧的函数。
 C#侧的普通参数以及引用参数，对应lua侧函数参数；C#侧的返回值对应于Lua的第一个返回值；引用参数和out参数则按序对应于Lua的第2到第N个参数。
+
+## 宏
+
+#### HOTFIX_ENABLE
+
+打开hotfix功能。
+
+#### NOT_GEN_WARNING
+
+反射时打印warning。
+
+#### GEN_CODE_MINIMIZE
+
+以偏向减少代码段的方式生成代码。
